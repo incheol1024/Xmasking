@@ -10,20 +10,24 @@ import java.util.function.Predicate;
 
 public class XtormUtilTest {
 
+    private String testElementId;
+
     private String uploadLocalFile;
 
     private String downloadLocalFile;
 
+
     @Before
     public void setUp() {
+        testElementId = "2019071607125100";
         uploadLocalFile = "D:\\app\\xtorm-test\\upload\\test.txt";
-        downloadLocalFile = "D:\\app\\xtorm-test\\download";
+        downloadLocalFile = "D:\\app\\xtorm-test\\download\\" + testElementId;
     }
 
 
     @Test
     public void uploadElementTestForSuccess() {
-        Optional<String> optional = XtormUtil.uploadElement("D:\\app\\xtorm-test\\upload\\test.txt");
+        Optional<String> optional = XtormUtil.uploadElement(uploadLocalFile);
 
         Predicate<Optional<String>> optionalPredicate = (Optional<String> optionalS) -> optionalS.isPresent();
         Assertions.assertThat(optionalPredicate).accepts(optional);
@@ -35,7 +39,7 @@ public class XtormUtilTest {
 
     @Test
     public void uploadElementTestForFail() {
-        Optional<String> optional = XtormUtil.uploadElement("D:\\app\\xtorm-test\\upload\\test.tt");
+        Optional<String> optional = XtormUtil.uploadElement(uploadLocalFile+"xx");
 
         Predicate<Optional<String>> optionalPredicate = (Optional<String> stringOptional) -> !stringOptional.isPresent();
         Assertions.assertThat(optionalPredicate).accepts(optional);
@@ -43,11 +47,25 @@ public class XtormUtilTest {
 
 
     @Test
-    public void downloadElementTest() {
+    public void downloadElementTestForSuccess() {
 
-        int actual = XtormUtil.downloadElement("2019071604364600", "D:\\app\\xtorm-test\\download\\2019071604364600");
+        int actual = XtormUtil.downloadElement("2019071607125100", downloadLocalFile);
         IntPredicate intPredicate = expected -> actual == expected;
         Assertions.assertThat(intPredicate).accepts(0);
 
     }
+
+    @Test
+    public void downloadElementTestForFail() {
+
+        int actual = XtormUtil.downloadElement("dfdfdf", downloadLocalFile);
+        IntPredicate intPredicate = expected -> actual == expected;
+        Assertions.assertThat(intPredicate).accepts(3);
+
+    }
+
+
+
+
+
 }

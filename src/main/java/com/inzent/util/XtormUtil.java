@@ -41,7 +41,7 @@ public class XtormUtil {
         int result = element.create("XVARM_MAIN");
         String elementId = element.m_elementId.split("::")[1];
 
-        if(result == 0 ) {
+        if (result == 0) {
             return Optional.of(elementId);
         }
 
@@ -67,8 +67,12 @@ public class XtormUtil {
 
     public static int downloadElement(String elementId, String localFile) {
         asysConnectData connection = XtormConnection.getXtormConnection();
-        int result = getAsysUsrElement(elementId, connection).getContent(localFile, "", "");
+        asysUsrElement element = getAsysUsrElement(elementId, connection);
+        int result = element.getContent(localFile, "", "");
         XtormConnection.closeXtormConnection(connection);
+
+        if (result != 0)
+            logger.error("Xtorm Download Fail. return code {}, error msg - {}", result, element.m_lastError);
         return result;
     }
 
