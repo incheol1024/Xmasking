@@ -12,7 +12,7 @@ public class XtormUtil {
 
     private static Logger logger = LoggerFactory.getLogger(XtormUtil.class);
 
-    private static Properties properties = PropertyLoader.getAppProperty();
+    private static Properties properties = AppProperty.getProperties();
 
     private static String server = properties.getProperty("XTORM_SERVER");
     private static int port = Integer.parseInt(properties.getProperty("XTORM_PORT"));

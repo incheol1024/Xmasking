@@ -1,7 +1,5 @@
 package com.inzent;
 
-import com.inzent.util.PropertyLoader;
-
 /**
  * Hello world!
  */

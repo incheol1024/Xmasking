@@ -22,7 +22,7 @@ public class AgentThreadPoolTest {
 
         ExecutorService executorService = AgentThreadPool.getExecutorService();
         executorService.execute(() -> {
-                    XtormUtil.downloadElement("2019071607125100", "D:\\app\\xtorm-test\\download\\2019071607125100");
+            XtormUtil.downloadElement("2019071607125100", "D:\\app\\xtorm-test\\download\\2019071607125100");
         });
 
 //        executorService.execute(() -> {
@@ -33,6 +33,23 @@ public class AgentThreadPoolTest {
 //                    --max;
 //                }
 //        });
+    }
+
+    @Test
+    public void getProcessNumber() {
+
+
+        ExecutorService executorService = AgentThreadPool.getExecutorService();
+
+        executorService.execute(() -> {
+            for (int i = 0; i < 10000; i++)
+                System.out.println(i);
+        });
+
+        for (int i = 0; i < 10000; i++) {
+            int num = Runtime.getRuntime().availableProcessors();
+            System.out.println(num);
+        }
     }
 
 }
