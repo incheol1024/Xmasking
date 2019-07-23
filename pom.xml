@@ -58,10 +58,17 @@
             <version>11.2.0.3</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.15</version>
+        </dependency>
+
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
@@ -72,7 +79,21 @@
         </dependency>
 
 
+
+
     </dependencies>
+
+    <repositories>
+
+        <repository>
+
+            <id>codelds</id>
+
+            <url>http://www.datanucleus.org/downloads/maven2/</url>
+
+        </repository>
+
+    </repositories>
 
     <build>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->

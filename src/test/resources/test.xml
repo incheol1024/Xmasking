@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<DBMS driver="oracle.jdbc.driver.OracleDriver"
+      url="jdbc:oracle:thin:@jpa.c4hnk07tn7ap.ap-northeast-2.rds.amazonaws.com:1521:ORCL"
+      user="xtorm"
+      password="xtorm">
+    <agent type="selector" name="sample1">
+        <select column="elementid"> select * from asyscontentelement </select>
+    </agent>
+
+    <agent type="selector" name="sample2">
+        <select column="elementid"> select * from asyselement</select>
+    </agent>
+</DBMS>

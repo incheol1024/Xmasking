@@ -4,6 +4,7 @@ public class QueryEntity extends DatabaseEntity{
 
     String sql;
 
+
     public String getSql() {
         return sql;
     }

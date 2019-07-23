@@ -10,6 +10,7 @@ public class DatabaseEntity {
 
     private String password;
 
+    private int connectionPoolCount;
 
     public String getDriver() {
         return driver;
@@ -41,6 +42,14 @@ public class DatabaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getConnectionPoolCount() {
+        return connectionPoolCount;
+    }
+
+    public void setConnectionPoolCount(int connectionPoolCount) {
+        this.connectionPoolCount = connectionPoolCount;
     }
 
     @Override
