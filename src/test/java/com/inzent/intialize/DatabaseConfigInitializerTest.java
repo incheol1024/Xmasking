@@ -1,7 +1,7 @@
 package com.inzent.intialize;
 
 import com.inzent.entity.DatabaseEntity;
-import com.inzent.initialize.DatabaseConfigInitializer;
+import com.inzent.initialize.database.DatabaseConfigInitializer;
 import com.inzent.pool.database.DatabaseConfigPool;
 import com.inzent.pool.database.DatabaseName;
 import org.assertj.core.api.Assertions;

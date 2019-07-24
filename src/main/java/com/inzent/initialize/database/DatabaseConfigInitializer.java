@@ -1,4 +1,4 @@
-package com.inzent.initialize;
+package com.inzent.initialize.database;
 
 import com.inzent.entity.DatabaseEntity;
 import com.inzent.pool.database.DatabaseConfigPool;
