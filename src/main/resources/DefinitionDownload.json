@@ -1,0 +1,13 @@
+{
+  "sql": {
+    "previousVersion": {
+      "sql": "select * from det_ver_t where version = ? and "
+    },
+    "previousFinal": {
+
+    }
+
+  }
+}
+
+

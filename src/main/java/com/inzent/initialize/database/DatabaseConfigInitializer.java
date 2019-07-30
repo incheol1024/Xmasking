@@ -5,13 +5,20 @@ import com.inzent.pool.database.DatabaseConfigPool;
 import com.inzent.pool.database.DatabaseName;
 import com.inzent.util.AppProperty;
 import com.inzent.util.ValidateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.Properties;
 
 public class DatabaseConfigInitializer implements DatabaseInitializer {
 
+    private Logger logger = LoggerFactory.getLogger(DatabaseConfigInitializer.class);
+
     private static final DatabaseConfigInitializer databaseConfigInitializer = new DatabaseConfigInitializer();
+
+    private DatabaseConfigInitializer() {
+    }
 
     public static DatabaseConfigInitializer getInstance() {
         return databaseConfigInitializer;
@@ -19,6 +26,8 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
 
     @Override
     public void initialize() {
+
+        logger.trace("Initialize DatabaseConfigInitializer");
 
         Properties properties = AppProperty.getProperties();
 
@@ -39,6 +48,8 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
 
         databaseConfigPool.putDatabaseEntity(DatabaseName.EDMS, edmsDatabaseEntity);
 
+        logger.trace("Complete initializing EDMS DatabaseEntity {}", databaseConfigPool.getDatabaseEntity(DatabaseName.EDMS).get());
+
         DatabaseEntity maskDatabaseEntity = new DatabaseEntity();
         maskDatabaseEntity.setDriver(properties.getProperty("DB_MASK_DRIVER"));
         maskDatabaseEntity.setUrl(properties.getProperty("DB_MASK_URL"));
@@ -47,12 +58,16 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
 
         connectionCountprop = properties.getProperty("DB_MASK_CONNECTION_COUNT");
         if (connectionCountprop == null || connectionCountprop.equals("")) {
-            edmsDatabaseEntity.setConnectionPoolCount(DatabaseInitializer.DEFUALT_CONNECTION_COUNT);
+            maskDatabaseEntity.setConnectionPoolCount(DatabaseInitializer.DEFUALT_CONNECTION_COUNT);
         } else {
-            edmsDatabaseEntity.setConnectionPoolCount(Integer.valueOf(connectionCountprop));
+            maskDatabaseEntity.setConnectionPoolCount(Integer.valueOf(connectionCountprop));
         }
 
         databaseConfigPool.putDatabaseEntity(DatabaseName.MASK, maskDatabaseEntity);
+
+        logger.trace("Complete initializing MASK DatabaseEntity {}", databaseConfigPool.getDatabaseEntity(DatabaseName.MASK).get());
+
+        logger.trace("Validate completed DatabaseEntity");
         validateDatabaseProperties(databaseConfigPool);
     }
 
@@ -72,17 +87,18 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
 
     private void validateMandatoryProperties(DatabaseEntity databaseEntity) {
 
-        boolean validationResult = ValidateUtil.validateStringsNull(
+        boolean validationResult = ValidateUtil.validateStringsIsNull(
                 databaseEntity.getDriver(),
                 databaseEntity.getUrl(),
                 databaseEntity.getUser(),
                 databaseEntity.getPassword());
 
         if (validationResult == false)
-            throw new RuntimeException("Database mandatory configution is driver, url, user, password");
+            throw new RuntimeException("Database mandatory configuration is driver, url, user, password");
     }
 
     private void validateOptionalProperties(DatabaseEntity databaseEntity) {
+
 
     }
 }

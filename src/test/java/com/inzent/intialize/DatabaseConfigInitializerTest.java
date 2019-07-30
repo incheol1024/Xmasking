@@ -15,8 +15,8 @@ public class DatabaseConfigInitializerTest {
     @Test
     public void initializeTest() {
 
-        DatabaseConfigInitializer databaseConfigInitailizer = DatabaseConfigInitializer.getInstance();
-        databaseConfigInitailizer.initialize();
+        DatabaseConfigInitializer databaseConfigInitializer = DatabaseConfigInitializer.getInstance();
+        databaseConfigInitializer.initialize();
 
         DatabaseConfigPool databaseConfigPool = DatabaseConfigPool.getInstance();
         Optional<DatabaseEntity> databaseEntityEDMS = databaseConfigPool.getDatabaseEntity(DatabaseName.EDMS);

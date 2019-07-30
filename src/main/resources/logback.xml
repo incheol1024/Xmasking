@@ -28,10 +28,13 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.inzent" level="DEBUG">
+<!--    <root level="TRACE">-->
+<!--        <appender-ref ref="SAMPLE" />-->
+<!--    </root>-->
+    <logger name="com.inzent" level="TRACE">
         <appender-ref ref="SAMPLE" />
     </logger>
-    <logger name="com.inzent" level="INFO">
+    <logger name="com.inzent" level="TRACE">
         <appender-ref ref="ROLLING" />
     </logger>
 <!--    <root level="DEBUG">-->

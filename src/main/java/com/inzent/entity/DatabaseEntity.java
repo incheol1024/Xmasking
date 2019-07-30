@@ -59,6 +59,7 @@ public class DatabaseEntity {
                 ", url='" + url + '\'' +
                 ", user='" + user + '\'' +
                 ", password='" + password + '\'' +
+                ", connectionPoolCount=" + connectionPoolCount +
                 '}';
     }
 }
