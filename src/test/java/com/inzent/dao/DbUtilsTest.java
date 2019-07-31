@@ -1,14 +1,11 @@
-package com.inzent.db;
+package com.inzent.dao;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.hamcrest.core.IsEqual;
-import org.hamcrest.core.IsSame;
 import org.junit.Before;
 import org.junit.Test;
-import org.quartz.impl.jdbcjobstore.DB2v6Delegate;
 
 import java.sql.SQLException;
 
