@@ -1,57 +1,96 @@
 package com.inzent.agent;
 
-import com.inzent.dto.SqlParamDto;
+import com.inzent.dto.edms.EdmsCommonSqlParamDto;
+import com.inzent.dto.edms.EdmsDetSqlParamDto;
+import com.inzent.dto.edms.EdmsDetVerSqlParamDto;
 import com.inzent.pool.database.DatabaseName;
 import com.inzent.pool.database.QueryRunnerPool;
-import org.apache.commons.dbutils.BaseResultSetHandler;
+import com.inzent.util.AppProperty;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class TargetFinder {
 
+    private Logger logger = LoggerFactory.getLogger(TargetFinder.class);
+
+    private Properties properties = AppProperty.getProperties();
+
     private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+
     private static QueryRunner queryRunner = getQueryRunner();
 
-    public Queue<String> getQueryList() throws SQLException {
-// How ??..
-
-//        ResultSetHandler<SqlParamDto> resultSetHandler = new BeanHandler<>(SqlParamDto.class);
-        ResultSetHandler<SqlParamDto> resultSetHandler = (resultSet) -> {
-            if(resultSet.next()) {
-                SqlParamDto sqlParamDto = new SqlParamDto();
-                sqlParamDto.setMaskOrder(resultSet.getString("mask_order"));
-                sqlParamDto.setLctgCd(resultSet.getString("lctg_cd"));
-                sqlParamDto.setMctgCd(resultSet.getString("mctg_cd"));
-                sqlParamDto.setFormCd(resultSet.getString("form_cd"));
-                sqlParamDto.setDcmIdBegin(resultSet.getString("dcm_id_begin"));
-                sqlParamDto.setDcmIdEnd(resultSet.getString("dcm_id_end"));
-                sqlParamDto.setVersion(resultSet.getString("version"));
-                return sqlParamDto;
-            }
-            else {
-                return null;
-            }
-        };
-
-
-//        queryRunner.update("insert into xtorm.DOWN_RANGE values(?, ?, ?, ?, ?, ?, ?);", new Object(),"CF","02","06","4018","4019",1);
-
-        SqlParamDto sqlParamDto = queryRunner.query("select * from xtorm.DOWN_RANGE", resultSetHandler);
-
-        System.out.println(sqlParamDto);
-
-        return new ConcurrentLinkedQueue<String>();
+    public <T extends EdmsCommonSqlParamDto> Queue<String> getFindSqlQueue(Class<T> classOfEdmsParamDto) throws SQLException {
+        List<T> edmsSqlParamDtoList = this.getEdmsSqlParamDtoList(classOfEdmsParamDto);
+        List<String> sqlList = supplySqlList(edmsSqlParamDtoList);
+        return new ConcurrentLinkedQueue<>(sqlList);
     }
 
+    private <T extends EdmsCommonSqlParamDto> List<String> supplySqlList(List<T> edmsSqlParamDtoList) {
+
+        String initialSql = "";
+
+        if (edmsSqlParamDtoList.get(0) instanceof EdmsDetSqlParamDto) {
+            initialSql = properties.getProperty("DOWN_QUERY");
+
+        } else if (edmsSqlParamDtoList.get(0) instanceof EdmsDetVerSqlParamDto) {
+            initialSql = properties.getProperty("DOWN_QUERY_VERSION");
+        }
+
+        return null;
+    }
+
+    private <T extends EdmsCommonSqlParamDto> List<String> convertToSQL(List<T> edmsSqlParamDtoList) {
+
+        if (edmsSqlParamDtoList.size() == 0) {
+            throw new RuntimeException("EdmsParammDtoList size is 0. EDMS PARAM Table is normal? ");
+        }
+
+        return edmsSqlParamDtoList.stream().map((edmsParamDto) ->
+                new StringBuffer().append("select dcm_id from")
+                        .append(" ").append(edmsParamDto.getTable_name())
+                        .append(" ").append("where")
+                        .append(" lctg_cd=").append("\'" + edmsParamDto.getLctg_cd() + "\'")
+                        .append(" and mctg_cd=").append(edmsParamDto.getMctg_cd())
+                        .append(" and form_cd=").append(edmsParamDto.getForm_cd())
+                        .append(" and dcm_id between ").append(edmsParamDto.getDcm_id_begin()).append(" and ").append(edmsParamDto.getDcm_id_end())
+                        .toString())
+                .peek((sql) -> logger.debug("created sql = {}", sql))
+                .collect(Collectors.toList());
+    }
+
+    private <T extends EdmsCommonSqlParamDto> List<T> getEdmsSqlParamDtoList(Class<T> edmsDto) throws SQLException {
+        ResultSetHandler<List<T>> resultSetHandler = new BeanListHandler(edmsDto);
+
+        String prop = "";
+        if (edmsDto.getName().equals(EdmsDetSqlParamDto.class.getName()))
+            prop = "DOWN_DET_PARAMS";
+
+        if (edmsDto.getName().equals(EdmsDetVerSqlParamDto.class.getName()))
+            prop = "DOWN_DET_VER_PARAMS";
+
+        List<T> list =
+                queryRunner.query(properties.getProperty(prop), resultSetHandler);
+
+        for (T edmsDetSqlParamDto : list) {
+            logger.debug(edmsDto.getName() + " Dto Param: {} ", edmsDetSqlParamDto);
+        }
+        return list;
+    }
+
+
     private static QueryRunner getQueryRunner() {
-       return  queryRunnerPool.getQueryRunner(DatabaseName.MASK)
-               .orElseThrow(() -> new RuntimeException("Not Found QueryRunner DatabaseName: "+ DatabaseName.MASK));
+        return queryRunnerPool.getQueryRunner(DatabaseName.MASK)
+                .orElseThrow(() -> new RuntimeException("Not Found QueryRunner DatabaseName: " + DatabaseName.MASK));
     }
 
 }
