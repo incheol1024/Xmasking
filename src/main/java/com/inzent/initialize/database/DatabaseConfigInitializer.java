@@ -5,6 +5,7 @@ import com.inzent.pool.database.DatabaseConfigPool;
 import com.inzent.pool.database.DatabaseName;
 import com.inzent.util.AppProperty;
 import com.inzent.util.ValidateUtil;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
         edmsDatabaseEntity.setDriver(properties.getProperty("DB_EDMS_DRIVER"));
         edmsDatabaseEntity.setUrl(properties.getProperty("DB_EDMS_URL"));
         edmsDatabaseEntity.setUser(properties.getProperty("DB_EDMS_USER"));
-        edmsDatabaseEntity.setPassword(properties.getProperty("DB_EDMS_PASSWORD"));
+        edmsDatabaseEntity.setPassword(decryptPassword(properties.getProperty("DB_EDMS_PASSWORD")));
 
         String connectionCountprop = properties.getProperty("DB_EDMS_CONNECTION_COUNT");
         if (connectionCountprop == null || connectionCountprop.equals("")) {
@@ -54,7 +55,7 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
         maskDatabaseEntity.setDriver(properties.getProperty("DB_MASK_DRIVER"));
         maskDatabaseEntity.setUrl(properties.getProperty("DB_MASK_URL"));
         maskDatabaseEntity.setUser(properties.getProperty("DB_MASK_USER"));
-        maskDatabaseEntity.setPassword(properties.getProperty("DB_MASK_PASSWORD"));
+        maskDatabaseEntity.setPassword(decryptPassword(properties.getProperty("DB_MASK_PASSWORD")));
 
         connectionCountprop = properties.getProperty("DB_MASK_CONNECTION_COUNT");
         if (connectionCountprop == null || connectionCountprop.equals("")) {
@@ -100,5 +101,12 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
     private void validateOptionalProperties(DatabaseEntity databaseEntity) {
 
 
+    }
+
+    private String decryptPassword(String encryptedPassword) {
+        StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
+        standardPBEStringEncryptor.setAlgorithm("PBEWithMD5AndDES");
+        standardPBEStringEncryptor.setPassword("HDMF2019!!");
+        return standardPBEStringEncryptor.decrypt(encryptedPassword);
     }
 }

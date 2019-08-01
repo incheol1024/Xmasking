@@ -40,11 +40,11 @@ public class TargetFinder {
         };
 
 
-        queryRunner.update("insert into xtorm.DOWN_RANGE values(?, ?, ?, ?, ?, ?, ?);", new Object(),"CF","02","06","4018","4019",1);
+//        queryRunner.update("insert into xtorm.DOWN_RANGE values(?, ?, ?, ?, ?, ?, ?);", new Object(),"CF","02","06","4018","4019",1);
 
-//        SqlParamDto sqlParamDto = queryRunner.query("select * from xtorm.DOWN_RANGE", resultSetHandler);
-//
-//        System.out.println(sqlParamDto);
+        SqlParamDto sqlParamDto = queryRunner.query("select * from xtorm.DOWN_RANGE", resultSetHandler);
+
+        System.out.println(sqlParamDto);
 
         return new ConcurrentLinkedQueue<String>();
     }
