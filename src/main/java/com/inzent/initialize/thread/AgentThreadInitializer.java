@@ -38,6 +38,12 @@ public class AgentThreadInitializer implements ThreadInitializer {
         prop = properties.getProperty("REPLACE_AGENT_THREAD");
         int replaceThread = setThreadCount(prop);
 
+        prop = properties.getProperty("LOOKUP_AGENT_THREAD");
+        int lookUpThread = setThreadCount(prop);
+
+        for( Action action : Action.values())
+            System.out.println(action);
+
         ExecutorService downExecutorService = Executors.newFixedThreadPool(downloadThread);
         ExecutorService replaceExecutorService = Executors.newFixedThreadPool(replaceThread);
 

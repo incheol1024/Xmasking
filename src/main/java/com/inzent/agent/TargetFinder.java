@@ -40,10 +40,10 @@ public class TargetFinder {
         String initialSql = "";
 
         if (edmsSqlParamDtoList.get(0) instanceof EdmsDetSqlParamDto) {
-            initialSql = properties.getProperty("DOWN_QUERY");
+            initialSql = properties.getProperty("LOOKUP_SQL");
 
         } else if (edmsSqlParamDtoList.get(0) instanceof EdmsDetVerSqlParamDto) {
-            initialSql = properties.getProperty("DOWN_QUERY_VERSION");
+            initialSql = properties.getProperty("LOOKUP_VERSION_SQL");
         }
 
         return null;

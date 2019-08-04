@@ -11,6 +11,6 @@ public interface EdmsAgent extends Agent{
     enum  EdmsTableName {
 
         EDM_INFO_DET_T,
-        EDM_IFNO_DET_VER_T
+        EDM_INFO_DET_VER_T
     }
 }

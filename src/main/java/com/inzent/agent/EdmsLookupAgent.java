@@ -11,21 +11,24 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class EdmsFindAgent implements EdmsAgent {
+public class EdmsLookupAgent implements EdmsAgent {
 
     private EdmsFindMode edmsFindMode;
 
     private EdmsTableName edmsTableName;
 
+    private String beginDcmId;
+
+    private String endDcmId;
+
+    private String sql;
     private QueryRunner queryRunner;
 
-    public EdmsFindAgent(EdmsFindMode edmsFindMode, EdmsTableName edmsTableName) {
+    public EdmsLookupAgent(EdmsFindMode edmsFindMode, EdmsTableName edmsTableName) {
         this.edmsFindMode = edmsFindMode;
         this.edmsTableName = edmsTableName;
-
         this.queryRunner = getQueryRunner();
     }
-
 
     @Override
     public void run() {
@@ -39,7 +42,7 @@ public class EdmsFindAgent implements EdmsAgent {
 
         if (edmsTableName == EdmsTableName.EDM_INFO_DET_T)
             findAllOfDetTable();
-        else if (edmsTableName == EdmsTableName.EDM_IFNO_DET_VER_T)
+        else if (edmsTableName == EdmsTableName.EDM_INFO_DET_VER_T)
             findAllOfDetVerTable();
     }
 
@@ -68,6 +71,8 @@ public class EdmsFindAgent implements EdmsAgent {
             return false;             //dcm_id 가 이지핌스 테이블에 존재하지 않는것만 필터링
         });
     }
+
+
 
     private void findAllOfDetVerTable() {
 

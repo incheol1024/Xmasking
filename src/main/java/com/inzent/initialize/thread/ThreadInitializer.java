@@ -10,6 +10,7 @@ public interface ThreadInitializer extends Initializer {
     int DEFAULT_THRED_COUNT = 1;
 
     enum Action {
+        LOOKUP,
         DOWNLOAD,
         REPLACE
     }
