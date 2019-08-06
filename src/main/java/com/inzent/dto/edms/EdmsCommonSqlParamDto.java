@@ -25,7 +25,7 @@ public abstract class EdmsCommonSqlParamDto {
         this.mask_order = mask_order;
     }
 
-    public String gtTable_name() {
+    public String getTable_name() {
         return table_name;
     }
 

@@ -25,4 +25,6 @@ public class DatabaseConfigInitializerTest {
         Assertions.assertThat(databaseEntityEDMS).isNotNull().containsInstanceOf(DatabaseEntity.class);
         Assertions.assertThat(databaseEntityMASK).isNotNull().containsInstanceOf(DatabaseEntity.class);
     }
+
+
 }

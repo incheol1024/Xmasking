@@ -21,7 +21,8 @@ public class Encryption {
         StandardPBEStringEncryptor standardPBEStringEncryptor = new StandardPBEStringEncryptor();
         standardPBEStringEncryptor.setAlgorithm("PBEWithMD5AndDES");
         standardPBEStringEncryptor.setPassword("HDMF2019!!");
-        String dbPwd = standardPBEStringEncryptor.encrypt(properties.getProperty("DB_EDMS_PASSWORD"));
+//        String dbPwd = standardPBEStringEncryptor.encrypt(properties.getProperty("DB_MASK_PASSWORD"));
+        String dbPwd = standardPBEStringEncryptor.encrypt("xtorm");
         System.out.println(dbPwd); //2DwfdOEuC0gD+8vttgVCeKyqIAWhcEaK
     }
 
