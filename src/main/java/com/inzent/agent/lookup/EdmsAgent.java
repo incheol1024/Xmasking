@@ -1,6 +1,8 @@
-package com.inzent.agent;
+package com.inzent.agent.lookup;
 
-public interface EdmsAgent extends Agent{
+import com.inzent.agent.Agent;
+
+public interface EdmsAgent extends Agent {
 
     enum EdmsFindMode {
 

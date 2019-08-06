@@ -1,4 +1,4 @@
-package com.inzent.agent;
+package com.inzent.agent.lookup;
 
 import com.inzent.dto.edms.EdmsLookupDto;
 import com.inzent.pool.database.DatabaseName;

@@ -1,4 +1,4 @@
-package com.inzent.agent;
+package com.inzent.agent.lookup;
 
 import com.inzent.dto.edms.EdmsCommonSqlParamDto;
 import com.inzent.dto.edms.EdmsDetSqlParamDto;

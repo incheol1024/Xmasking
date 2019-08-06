@@ -1,6 +1,6 @@
 package com.inzent;
 
-import com.inzent.agent.DownTargetCollector;
+import com.inzent.agent.download.DownTargetCollector;
 import com.inzent.initialize.database.DataSourcePoolInitializer;
 import com.inzent.initialize.database.DatabaseConfigInitializer;
 import com.inzent.initialize.database.QueryRunnerInitializer;
@@ -10,9 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static jdk.internal.dynalink.support.Guards.isNull;
-
-class Boot {
+public class Boot {
 
     private DatabaseConfigInitializer databaseConfigInitializer = DatabaseConfigInitializer.getInstance();
     private DataSourcePoolInitializer dataSourcePoolInitializer = DataSourcePoolInitializer.getInstance();
@@ -21,7 +19,7 @@ class Boot {
     private AgentThreadInitializer agentThreadInitializer = AgentThreadInitializer.getInstance();
 
 
-    void boot() {
+    public void boot() {
 
         checkNull();
 

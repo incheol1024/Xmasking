@@ -1,7 +1,12 @@
 package com.inzent.agent;
 
+import com.inzent.Boot;
+import com.inzent.agent.download.DownTargetCollector;
+import com.inzent.agent.download.DownloadAgent;
+import com.inzent.agent.download.DownloadAgentImpl;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,7 +24,11 @@ public class DownloadAgentImplTest {
     }
 
     @Test
-    public void runTestForTargetQueueIsExist() {
+    public void runTestForTargetQueueIsExist() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        Boot boot = new Boot();
+        boot.boot();
+
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
         executorService.execute(new DownTargetCollector());

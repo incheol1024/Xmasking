@@ -1,4 +1,4 @@
-package com.inzent.agent;
+package com.inzent.agent.download;
 
 import com.inzent.dto.agent.DownloadResultParamDto;
 import com.inzent.pool.database.DatabaseName;

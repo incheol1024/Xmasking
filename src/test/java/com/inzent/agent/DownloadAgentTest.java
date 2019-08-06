@@ -1,5 +1,6 @@
 package com.inzent.agent;
 
+import com.inzent.agent.download.DownloadAgent;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
@@ -7,13 +8,10 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
 
 public class DownloadAgentTest implements DownloadAgent {
 

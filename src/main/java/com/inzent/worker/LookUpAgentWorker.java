@@ -1,6 +1,6 @@
 package com.inzent.worker;
 
-import com.inzent.agent.EdmsLookupAgent;
+import com.inzent.agent.lookup.EdmsLookupAgent;
 import com.inzent.initialize.thread.ThreadInitializer;
 import com.inzent.pool.thread.ExecutorServicePool;
 import com.inzent.util.AppProperty;
@@ -8,9 +8,9 @@ import com.inzent.util.AppProperty;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 
-import static com.inzent.agent.EdmsAgent.EdmsFindMode.ALL;
-import static com.inzent.agent.EdmsAgent.EdmsFindMode.MASK_TARGET;
-import static com.inzent.agent.EdmsAgent.EdmsTableName.*;
+import static com.inzent.agent.lookup.EdmsAgent.EdmsFindMode.ALL;
+import static com.inzent.agent.lookup.EdmsAgent.EdmsFindMode.MASK_TARGET;
+import static com.inzent.agent.lookup.EdmsAgent.EdmsTableName.*;
 
 public class LookUpAgentWorker {
 

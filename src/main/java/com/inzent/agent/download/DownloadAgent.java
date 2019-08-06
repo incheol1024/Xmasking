@@ -1,10 +1,7 @@
-package com.inzent.agent;
+package com.inzent.agent.download;
 
-import com.inzent.dto.mask.DownTargetDto;
-import com.inzent.pool.database.QueryRunnerPool;
-import org.apache.commons.dbutils.QueryRunner;
+import com.inzent.agent.Agent;
 
-import java.io.File;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.io.File.separator;
 
-interface DownloadAgent extends Agent {
+public interface DownloadAgent extends Agent {
 
     Boolean IS_DOWNLOAD = Boolean.valueOf(properties.getProperty("DOWNLOAD"));
 
@@ -31,6 +28,8 @@ interface DownloadAgent extends Agent {
     String DOWN_FAIL_PARAM = "19";
 
     int DOWN_FOLDER_NUMBER = Integer.valueOf(properties.getProperty("DOWN_FOLDER_NUMBER"));
+
+    int DOWN_TARGET_QUEUE_SIZE = Integer.valueOf(properties.getProperty("DOWN_TARGET_QUEUE_SIZE"));
 
     AtomicInteger FOLDER_ROUND_POINT = new AtomicInteger();
 
