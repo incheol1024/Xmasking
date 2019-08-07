@@ -26,6 +26,8 @@ public class Boot {
 
     public void boot() {
 
+        try {
+        logger.debug("BOOT START" );
         checkNull();
 
         databaseConfigInitializer.initialize();
@@ -38,7 +40,6 @@ public class Boot {
 
         ExecutorServicePool executorServicePool = ExecutorServicePool.getInstance();
         ExecutorService executorService = executorServicePool.getExecutorService(ThreadInitializer.Action.SCHEDULER);
-        try {
             executorService.execute(new MainSchedulerAgent());
         } catch (SchedulerException e) {
             throw new RuntimeException("Boot Fail. ", e);

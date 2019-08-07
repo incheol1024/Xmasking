@@ -10,13 +10,17 @@ import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DownloadAgentImpl implements DownloadAgent {
+
+    private ConcurrentLinkedQueue concurrentLinkedQueue = new ConcurrentLinkedQueue();
 
     @Override
     public void run() {
 
         QueryRunner queryRunner = CommonUtil.getQueryRunner(DatabaseName.MASK);
+
 
         downTargetQueue.stream()
                 .limit(1000)
@@ -50,6 +54,5 @@ public class DownloadAgentImpl implements DownloadAgent {
         //update xtorm.Ezs_XIF_TBL set if_stat = '12', if_img_dir = ?, if_down_etime = ?, if_reg_time = sysdate where m_sys_id = ?
 
     }
-
 
 }

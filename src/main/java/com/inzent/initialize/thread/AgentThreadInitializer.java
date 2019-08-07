@@ -80,7 +80,7 @@ public class AgentThreadInitializer implements ThreadInitializer {
         if (propThread == null || propThread.equals(""))
             threadCount = ThreadInitializer.DEFAULT_THREAD_COUNT;
         else
-            threadCount = Integer.valueOf(properties.getProperty(propThread));
+            threadCount = Integer.valueOf(propThread);
 
         return threadCount;
     }

@@ -110,7 +110,7 @@ public class MainSchedulerAgent implements SchedulerAgent {
     }
 
     private void printScheduleJobs(JobDetail jobDetail, Trigger trigger) {
-        logger.debug("jobDetail {}  trigger {}",jobDetail.getDescription(), trigger.getDescription() );
+        logger.debug("Scheduling jobDetail {}, trigger {}",jobDetail.getJobClass().getName(), ((CronTrigger)trigger).getCronExpression() );
     }
 
 

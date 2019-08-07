@@ -31,7 +31,7 @@ public class DownloadAgentImplTest {
 
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
-        executorService.execute(new DownTargetCollector());
+//        executorService.execute(new DownTargetCollector());
 
         System.out.println(DownloadAgent.downTargetQueue.size());
 
