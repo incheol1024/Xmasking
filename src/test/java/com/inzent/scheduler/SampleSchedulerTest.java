@@ -1,6 +1,6 @@
 package com.inzent.scheduler;
 
-import com.inzent.agent.scheduler.SampleScheduler;
+import com.inzent.agent.scheduler.MainSchedulerAgent;
 import org.junit.Before;
 import org.junit.Test;
 import org.quartz.SchedulerException;
@@ -21,7 +21,7 @@ public class SampleSchedulerTest {
     @Test
     public void schedulerTest() throws SchedulerException, InterruptedException {
 
-        SampleScheduler sampleScheduler = new SampleScheduler();
+        MainSchedulerAgent sampleScheduler = new MainSchedulerAgent();
 
         sampleScheduler.initialize();
 

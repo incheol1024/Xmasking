@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class AgentThreadInitializer implements ThreadInitializer {
 
@@ -41,14 +42,20 @@ public class AgentThreadInitializer implements ThreadInitializer {
         prop = properties.getProperty("LOOKUP_AGENT_THREAD");
         int lookUpThread = setThreadCount(prop);
 
-        for( Action action : Action.values())
-            System.out.println(action);
+        prop = properties.getProperty("SCHEDULER_AGENT_THREAD");
+        int schedulerThread =setThreadCount(prop);
 
         ExecutorService downExecutorService = Executors.newFixedThreadPool(downloadThread);
         ExecutorService replaceExecutorService = Executors.newFixedThreadPool(replaceThread);
+        ExecutorService lookupExecutorService = Executors.newFixedThreadPool(lookUpThread);
+        ExecutorService schedulerExecutorService = Executors.newFixedThreadPool(schedulerThread);
+
+//        ThreadPoolExecutor threadPoolExecutor = Executors.newFixedThreadPool(4);
 
         configureExecutorServicePool(Action.DOWNLOAD, downExecutorService);
         configureExecutorServicePool(Action.REPLACE, replaceExecutorService);
+        configureExecutorServicePool(Action.LOOKUP, lookupExecutorService);
+        configureExecutorServicePool(Action.SCHEDULER, schedulerExecutorService);
 
         logger.trace("Complete initializing AgentThreadInitializer");
 
@@ -71,9 +78,9 @@ public class AgentThreadInitializer implements ThreadInitializer {
     private int setThreadCount(String propThread) {
         int threadCount = 0;
         if (propThread == null || propThread.equals(""))
-            threadCount = ThreadInitializer.DEFAULT_THRED_COUNT;
+            threadCount = ThreadInitializer.DEFAULT_THREAD_COUNT;
         else
-            threadCount = Integer.valueOf(properties.getProperty("DOWN_AGENT_THREAD"));
+            threadCount = Integer.valueOf(properties.getProperty(propThread));
 
         return threadCount;
     }

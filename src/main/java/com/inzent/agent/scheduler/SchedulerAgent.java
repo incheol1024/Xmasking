@@ -7,7 +7,11 @@ public interface SchedulerAgent extends Agent {
 
     String SCHEDULER = properties.getProperty("SCHEDULER");
 
+    String LOOKUP = properties.getProperty("LOOKUP");
+
     String LOOKUP_CRON = properties.getProperty("LOOKUP_CRON");
+
+    String LOOKUP_ALL = properties.getProperty("LOOKUP_ALL");
 
     String LOOKUP_ALL_CRON = properties.getProperty("LOOKUP_ALL_CRON");
 

@@ -2,6 +2,7 @@ package com.inzent.agent.download;
 
 import com.inzent.agent.Agent;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,8 +47,19 @@ public interface DownloadAgent extends Agent {
     default String getDownPath() {
         FOLDER_ROUND_POINT.compareAndSet(DOWN_FOLDER_NUMBER, BigInteger.ZERO.intValue());
         String path = getDownRootPath() + separator + getDatePath() + separator + FOLDER_ROUND_POINT.toString();
+        validateDirectory(path);
         FOLDER_ROUND_POINT.addAndGet(BigInteger.ONE.intValue());
         return path;
+    }
+
+    default void validateDirectory(String directory) {
+
+        File file = new File(directory);
+
+        if(file.exists())
+            return;
+
+        file.mkdir();
     }
 
 

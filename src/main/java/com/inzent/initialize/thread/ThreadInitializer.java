@@ -7,12 +7,14 @@ import java.util.concurrent.Executors;
 
 public interface ThreadInitializer extends Initializer {
 
-    int DEFAULT_THRED_COUNT = 1;
+    int DEFAULT_THREAD_COUNT = 1;
 
     enum Action {
         LOOKUP,
+        LOOKUP_ALL,
         DOWNLOAD,
-        REPLACE
+        REPLACE,
+        SCHEDULER
     }
 
     default ExecutorService generateExcecutorService(int threadCount) {
