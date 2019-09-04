@@ -11,7 +11,7 @@ public interface ReplaceAgent extends Agent{
 
     String REPLACE_ARCHIVE_MODE = properties.getProperty("REPLACE_ARCHIVE_MODE");
 
-    String REPLACE_ARCHIVE = properties.getProperty("REPLACE_ARCHIVE");
+    String REPLACE_ARCHIVE = properties.getProperty("REPLACE_TARGET_ARCHIVE");
 
     String REPLACE_TARGET_SQL = properties.getProperty("REPLACE_TARGET_SQL");
 

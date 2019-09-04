@@ -5,6 +5,7 @@ import com.inzent.dto.agent.DownloadResultParamDto;
 import com.inzent.initialize.thread.ThreadInitializer;
 import com.inzent.pool.thread.ExecutorServicePool;
 import com.inzent.util.AppProperty;
+import com.inzent.util.CommonUtil;
 import com.inzent.util.Stoper;
 import com.inzent.util.XtormUtil;
 import org.slf4j.Logger;
@@ -18,6 +19,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Stream;
+
+import static com.inzent.util.XtormUtil.XtormServer.EDMS_XTORM;
+import static com.inzent.util.XtormUtil.XtormServer.MASK_XTORM;
 
 public class DownloadAgentImpl implements DownloadAgent {
 
@@ -55,9 +59,9 @@ public class DownloadAgentImpl implements DownloadAgent {
             List<String> elementIdList = MaskDao.getElementIdListOfDownload(order, date);
 
             if (elementIdList.size() == 0) {
-                logger.debug("order - {}, date - {} is not exist target ElementId.",  order, date);
-                MaskDao.updateDateSuccess(order, date);
-                logger.debug("order - {}, date - {} updated row ",  order, date);
+                logger.debug("order - {}, date - {} is not exist target ElementId.", order, date);
+                MaskDao.updateDownDateSuccess(order, date);
+                logger.debug("order - {}, date - {} updated row ", order, date);
                 continue;
             }
 
@@ -106,7 +110,13 @@ public class DownloadAgentImpl implements DownloadAgent {
         return elementIdStream
                 .map((elementId) -> {
                     String downPath = getDownPath() + File.separator + elementId;
-                    int downloadResult = XtormUtil.downloadElement(elementId, downPath);
+
+                    int downloadResult = 0;
+                    if (CommonUtil.isPastElementId(elementId))
+                        downloadResult = XtormUtil.downloadElement(MASK_XTORM, elementId, downPath);
+                    else
+                        downloadResult = XtormUtil.downloadElement(EDMS_XTORM, elementId, downPath);
+
                     DownloadResultParamDto downloadResultParamDto = new DownloadResultParamDto();
                     downloadResultParamDto.setElementId(elementId);
 

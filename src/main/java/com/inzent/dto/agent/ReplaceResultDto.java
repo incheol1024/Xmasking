@@ -1,6 +1,6 @@
 package com.inzent.dto.agent;
 
-public class ReplaceTargetParamDto {
+public class ReplaceResultDto {
 
     private String elementId;
 

@@ -1,11 +1,13 @@
 package com.inzent.dao;
 
 import com.inzent.dto.agent.DownloadResultParamDto;
+import com.inzent.dto.agent.ReplaceTargetDto;
 import com.inzent.pool.database.DatabaseName;
 import com.inzent.pool.database.QueryRunnerPool;
 import com.inzent.util.AppProperty;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.slf4j.Logger;
@@ -35,6 +37,8 @@ public final class MaskDao {
 
     private static ResultSetHandler<String> replaceDateHandler = new ScalarHandler<>(1);
 
+    private static ResultSetHandler<List<ReplaceTargetDto>> replaceTargetDtoResultSetHandler = new BeanListHandler<>(ReplaceTargetDto.class);
+
     private static String REPLACE_DATE_SELECT_SQL = AppProperty.getValue("REPLACE_DATE_SELECT_SQL");
 
     private static String REPLACE_TARGET_SQL = AppProperty.getValue("REPLACE_TARGET_SQL");
@@ -42,6 +46,8 @@ public final class MaskDao {
     private static String REPLACE_SUCCESS_SQL = AppProperty.getValue("REPLACE_SUCCESS_SQL");
 
     private static String REPLACE_FAIL_SQL = AppProperty.getValue("REPLACE_FAIL_SQL");
+
+    private static String REPLACE_DATE_SUCCESS_SQL = AppProperty.getValue("REPLACE_DATE_SUCCESS_SQL");
 
     private static Logger logger = LoggerFactory.getLogger(MaskDao.class);
 
@@ -86,7 +92,7 @@ public final class MaskDao {
         return result;
     }
 
-    public static int updateDateSuccess(String order, String date) {
+    public static int updateDownDateSuccess(String order, String date) {
         int result = 0;
         try {
             result = queryRunner.update(DOWN_DATE_SUCCESS_SQL, order, date);
@@ -107,10 +113,10 @@ public final class MaskDao {
         return result;
     }
 
-    public static List<String> getElementIdListOfReplace(String order, String date) {
-        List<String> result = null;
+    public static List<ReplaceTargetDto> getElementIdListOfReplace(String order, String date) {
+        List<ReplaceTargetDto> result = null;
         try {
-            result = queryRunner.query(REPLACE_TARGET_SQL, elementIdListHandler, date, order);
+            result = queryRunner.query(REPLACE_TARGET_SQL, replaceTargetDtoResultSetHandler, date, order);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -131,6 +137,16 @@ public final class MaskDao {
         int result = 0;
         try {
             queryRunner.update(REPLACE_FAIL_SQL, elementId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static int updateReplaceDateSuccess(String order, String date) {
+        int result = 0;
+        try {
+            result = queryRunner.update(REPLACE_DATE_SUCCESS_SQL, date, order);
         } catch (SQLException e) {
             e.printStackTrace();
         }

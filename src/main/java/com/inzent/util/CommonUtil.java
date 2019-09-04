@@ -14,15 +14,14 @@ public final class CommonUtil {
         return queryRunnerOptional.orElseThrow(() -> new RuntimeException("Not Found QueryRunner DatabaseName: " + databaseName.name()));
     }
 
-    public static int checkElementId(String elementId) {
+    public static boolean isPastElementId(String elementId) {
         if (elementId.startsWith("ED"))
-            return 0;
+            return true;
 
         int date = Integer.valueOf(elementId.substring(2, 8));
-        if (date <= 190401) {
-            return 0;
-        }
+        if (date <= 190401)
+            return true;
 
-        return 1;
+        return false;
     }
 }
