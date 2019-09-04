@@ -18,6 +18,8 @@ public interface DownloadAgent extends Agent {
 
     String DOWN_TARGET_SQL = properties.getProperty("DOWN_TARGET_SQL");
 
+    String DOWN_TARGET_PAST_SQL = properties.getProperty("DOWN_TARGET_PAST_SQL");
+
     String DOWN_SUCCESS_SQL = properties.getProperty("DOWN_SUCCESS_SQL");
 
     String DOWN_FAIL_SQL = properties.getProperty("DOWN_FAIL_SQL");
@@ -34,7 +36,7 @@ public interface DownloadAgent extends Agent {
 
     AtomicInteger FOLDER_ROUND_POINT = new AtomicInteger();
 
-    Queue<String> downTargetQueue = new ConcurrentLinkedQueue<>();
+
 
     default String getDownRootPath() {
         return DOWN_ROOT_PATH;
@@ -45,10 +47,13 @@ public interface DownloadAgent extends Agent {
     }
 
     default String getDownPath() {
-        FOLDER_ROUND_POINT.compareAndSet(DOWN_FOLDER_NUMBER, BigInteger.ZERO.intValue());
-        String path = getDownRootPath() + separator + getDatePath() + separator + FOLDER_ROUND_POINT.toString();
-        validateDirectory(path);
-        FOLDER_ROUND_POINT.addAndGet(BigInteger.ONE.intValue());
+        String path = "";
+        synchronized (FOLDER_ROUND_POINT) {
+            FOLDER_ROUND_POINT.compareAndSet(DOWN_FOLDER_NUMBER, BigInteger.ZERO.intValue());
+            path = getDownRootPath() + separator + getDatePath() + separator + FOLDER_ROUND_POINT.toString();
+            validateDirectory(path);
+            FOLDER_ROUND_POINT.addAndGet(BigInteger.ONE.intValue());
+        }
         return path;
     }
 
@@ -56,10 +61,10 @@ public interface DownloadAgent extends Agent {
 
         File file = new File(directory);
 
-        if(file.exists())
+        if (file.exists())
             return;
 
-        file.mkdir();
+        file.mkdirs();
     }
 
 

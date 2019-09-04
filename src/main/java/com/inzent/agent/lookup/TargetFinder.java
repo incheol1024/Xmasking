@@ -25,7 +25,7 @@ public class TargetFinder {
 
     private Properties properties = AppProperty.getProperties();
 
-    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getInstance();
 
     private static QueryRunner queryRunner = getQueryRunner();
 

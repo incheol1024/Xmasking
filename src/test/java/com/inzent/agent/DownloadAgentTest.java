@@ -1,5 +1,6 @@
 package com.inzent.agent;
 
+import com.inzent.Boot;
 import com.inzent.agent.download.DownloadAgent;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -22,6 +23,9 @@ public class DownloadAgentTest implements DownloadAgent {
 
     @Before
     public void setUp() throws Exception {
+
+        Boot boot = new Boot();
+        boot.boot();
     }
 
     @After
@@ -73,4 +77,6 @@ public class DownloadAgentTest implements DownloadAgent {
         });
 
     }
+
+
 }

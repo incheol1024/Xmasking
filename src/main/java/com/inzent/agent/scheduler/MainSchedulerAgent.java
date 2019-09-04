@@ -59,8 +59,8 @@ public class MainSchedulerAgent implements SchedulerAgent {
 
         String trueString = Boolean.TRUE.toString();
 
-        if (DOWNLOAD_TARGET_COLLECTOR.equalsIgnoreCase(trueString))
-            setUpJob(DownloadTargetCollectorJob.class, DOWNLOAD_TARGET_COLLECTOR_CRON);
+//        if (DOWNLOAD_TARGET_COLLECTOR.equalsIgnoreCase(trueString))
+//            setUpJob(DownloadTargetCollectorJob.class, DOWNLOAD_TARGET_COLLECTOR_CRON);
 
         if (DOWNLOAD.equalsIgnoreCase(trueString))
             setUpJob(DownloadJob.class, DOWNLOAD_CRON);

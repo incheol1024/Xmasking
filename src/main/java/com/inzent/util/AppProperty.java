@@ -16,4 +16,8 @@ public class AppProperty {
     public static Properties getProperties(String propertiesName) {
         return PropertyLoader.getPropery(propertiesName);
     }
+
+    public static String getValue(String key) {
+        return properties.getProperty(key);
+    }
 }

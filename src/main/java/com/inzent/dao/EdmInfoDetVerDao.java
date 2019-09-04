@@ -11,7 +11,7 @@ import java.util.List;
 
 public class EdmInfoDetVerDao {
 
-    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getInstance();
 
     private static QueryRunner queryRunner = getQueryRunner();
 

@@ -50,7 +50,7 @@ public class TargetFinderTest {
         Queue<String> sqlQueue = targetFinder.getFindSqlQueue(EdmsDetSqlParamDto.class);
 
 
-        Optional<QueryRunner> optionalQueryRunner = QueryRunnerPool.getIntance().getQueryRunner(DatabaseName.EDMS);
+        Optional<QueryRunner> optionalQueryRunner = QueryRunnerPool.getInstance().getQueryRunner(DatabaseName.EDMS);
         QueryRunner queryRunner = optionalQueryRunner.orElseThrow(RuntimeException::new);
 
         sqlQueue.parallelStream()

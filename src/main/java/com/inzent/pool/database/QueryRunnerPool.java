@@ -9,16 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class QueryRunnerPool {
 
-    private static final QueryRunnerPool queryRunnerPool = new QueryRunnerPool();
-
     private final Map<DatabaseName, QueryRunner> queryRunnerMap = new ConcurrentHashMap<>();
 
     private QueryRunnerPool() {
 
     }
 
-    public static QueryRunnerPool getIntance() {
-        return queryRunnerPool;
+    public static QueryRunnerPool getInstance() {
+        return QueryRunnerPoolInstanceHolder.queryRunnerPool;
     }
 
     public void configureQueryRunner(DatabaseName databaseName) {
@@ -33,6 +31,14 @@ public class QueryRunnerPool {
 
     public Optional<QueryRunner> getQueryRunner(DatabaseName databaseName) {
         return Optional.ofNullable(queryRunnerMap.get(databaseName));
+    }
+
+    public QueryRunner getQueryRunnerImmediately(DatabaseName databaseName) {
+        return queryRunnerMap.get(databaseName);
+    }
+
+    private static class QueryRunnerPoolInstanceHolder {
+        private static final QueryRunnerPool queryRunnerPool = new QueryRunnerPool();
     }
 
 }

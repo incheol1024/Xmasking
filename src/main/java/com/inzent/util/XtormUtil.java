@@ -14,13 +14,13 @@ public class XtormUtil {
 
     private static Properties properties = AppProperty.getProperties();
 
-    private static String server = properties.getProperty("XTORM_SERVER");
-    private static int port = Integer.parseInt(properties.getProperty("XTORM_PORT"));
-    private static String client = properties.getProperty("XTORM_CLIENT");
-    private static String user = properties.getProperty("XTORM_USER");
-    private static String password = properties.getProperty("XTORM_PASSWORD");
-    private static String gateway = properties.getProperty("XTORM_GATEWAY");
-    private static String eClass = properties.getProperty("XTORM_ECLASS");
+    private static String server = properties.getProperty("XTORM_MASK_SERVER");
+    private static int port = Integer.parseInt(properties.getProperty("XTORM_MASK_PORT"));
+    private static String client = properties.getProperty("XTORM_MASK_CLIENT");
+    private static String user = properties.getProperty("XTORM_MASK_USER");
+    private static String password = properties.getProperty("XTORM_MASK_PASSWORD");
+    private static String gateway = properties.getProperty("XTORM_MASK_GATEWAY");
+    private static String eClass = properties.getProperty("XTORM_MASK_ECLASS");
 
     private XtormUtil() {
         throw new AssertionError();
@@ -72,7 +72,9 @@ public class XtormUtil {
         XtormConnection.closeXtormConnection(connection);
 
         if (result != 0)
-            logger.error("Xtorm Download Fail. return code {}, error msg - {}", result, element.m_lastError);
+            logger.error("Xtorm Download Fail {} . return code {}, error msg - {}",element.m_elementId, result, element.m_lastError);
+
+        logger.debug("Xtorm Download Success. {} : {}", element.m_elementId, localFile);
         return result;
     }
 

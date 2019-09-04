@@ -3,17 +3,20 @@ package com.inzent.agent.scheduler;
 import com.inzent.agent.download.DownloadAgentImpl;
 import com.inzent.initialize.thread.ThreadInitializer;
 import com.inzent.pool.thread.ExecutorServicePool;
+import com.inzent.util.AppProperty;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class DownloadJob implements Job {
 
+    private Properties properties = AppProperty.getProperties();
 
     private ExecutorService executorService;
 
@@ -25,18 +28,14 @@ public class DownloadJob implements Job {
         if (Objects.isNull(executorService))
             executorService = getExecutorService();
 
-
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executorService;
 
-        System.out.println("DownloadJob " +threadPoolExecutor.getActiveCount());
+        System.out.println("DownloadJob " + threadPoolExecutor.getActiveCount());
 
-//        logger.debug("threadPoolExecutor.getActiveCount() {}", threadPoolExecutor.getActiveCount());
-        logger.debug("threadPoolExecutor.getActiveCount() {}", executorService.getClass());
-        logger.debug(this.getClass().getName() + " is start");
+        int maxThread = Integer.valueOf(properties.getProperty("DOWN_AGENT_THREAD"));
 
-
-//        for(executorService.)
-        executorService.execute(new DownloadAgentImpl());
+        if (threadPoolExecutor.getActiveCount() < maxThread && !DownloadAgentImpl.isCollecting())
+            executorService.execute(new DownloadAgentImpl("0001"));
 
     }
 

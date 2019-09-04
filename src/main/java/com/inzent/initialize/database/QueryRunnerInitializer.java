@@ -18,7 +18,7 @@ public class QueryRunnerInitializer implements DatabaseInitializer {
 
     @Override
     public void initialize() {
-        QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+        QueryRunnerPool queryRunnerPool = QueryRunnerPool.getInstance();
         queryRunnerPool.configureQueryRunner(DatabaseName.EDMS);
         queryRunnerPool.configureQueryRunner(DatabaseName.MASK);
     }

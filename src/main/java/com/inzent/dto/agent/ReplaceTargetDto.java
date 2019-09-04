@@ -1,6 +1,6 @@
-package com.inzent.dto.mask;
+package com.inzent.dto.agent;
 
-public class DownTargetDto {
+public class ReplaceTargetDto {
 
     String m_sys_id;
 
@@ -14,9 +14,17 @@ public class DownTargetDto {
         this.m_sys_id = m_sys_id;
     }
 
+    public String getIf_img_dir() {
+        return if_img_dir;
+    }
+
+    public void setIf_img_dir(String if_img_dir) {
+        this.if_img_dir = if_img_dir;
+    }
+
     @Override
     public String toString() {
-        return "DownTargetDto{" +
+        return "ReplaceTargetDto{" +
                 "m_sys_id='" + m_sys_id + '\'' +
                 ", if_img_dir='" + if_img_dir + '\'' +
                 '}';

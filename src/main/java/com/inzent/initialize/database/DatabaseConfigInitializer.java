@@ -55,7 +55,7 @@ public class DatabaseConfigInitializer implements DatabaseInitializer {
         maskDatabaseEntity.setDriver(properties.getProperty("DB_MASK_DRIVER"));
         maskDatabaseEntity.setUrl(properties.getProperty("DB_MASK_URL"));
         maskDatabaseEntity.setUser(properties.getProperty("DB_MASK_USER"));
-        maskDatabaseEntity.setPassword(decryptPassword(properties.getProperty("DB_MASK_PASSWORD")));
+        maskDatabaseEntity.setPassword(properties.getProperty("DB_MASK_PASSWORD"));
 
         connectionCountprop = properties.getProperty("DB_MASK_CONNECTION_COUNT");
         if (connectionCountprop == null || connectionCountprop.equals("")) {

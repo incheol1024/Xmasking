@@ -1,7 +1,6 @@
 package com.inzent.agent;
 
 import com.inzent.Boot;
-import com.inzent.agent.download.DownTargetCollector;
 import com.inzent.agent.download.DownloadAgent;
 import com.inzent.agent.download.DownloadAgentImpl;
 import org.junit.Test;
@@ -16,7 +15,7 @@ public class DownloadAgentImplTest {
     public void runTestForTargetQueueIsZero() {
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
-        Runnable runnable = new DownloadAgentImpl();
+        Runnable runnable = new DownloadAgentImpl("0001");
         executorService.execute(runnable);
         executorService.execute(runnable);
         executorService.execute(runnable);
@@ -33,10 +32,7 @@ public class DownloadAgentImplTest {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
 //        executorService.execute(new DownTargetCollector());
 
-        System.out.println(DownloadAgent.downTargetQueue.size());
 
-        Runnable runnable = new DownloadAgentImpl();
-        executorService.execute(runnable);
 
     }
 }

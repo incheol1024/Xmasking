@@ -86,7 +86,7 @@ public class EdmsLookupAgent implements EdmsAgent {
     }
 
     private QueryRunner getQueryRunner() {
-        QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+        QueryRunnerPool queryRunnerPool = QueryRunnerPool.getInstance();
         return queryRunnerPool.getQueryRunner(DatabaseName.EDMS)
                 .orElseThrow(() -> new RuntimeException("Not Found QueryRunner DatabaseName: " + DatabaseName.EDMS.name()));
     }

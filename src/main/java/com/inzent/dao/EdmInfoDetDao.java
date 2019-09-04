@@ -5,14 +5,13 @@ import com.inzent.pool.database.QueryRunnerPool;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class EdmInfoDetDao {
 
-    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getIntance();
+    private static QueryRunnerPool queryRunnerPool = QueryRunnerPool.getInstance();
 
     private static QueryRunner queryRunner = getQueryRunner();
 
