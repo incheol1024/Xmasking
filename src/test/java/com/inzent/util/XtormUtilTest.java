@@ -1,5 +1,6 @@
 package com.inzent.util;
 
+import com.inzent.Boot;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.Temporal;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -66,7 +68,7 @@ public class XtormUtilTest {
         Assertions.assertThat(optionalPredicate).accepts(optional);
     }
 
-
+/*
     @Test
     public void downloadElementTestForSuccess() {
 
@@ -83,7 +85,18 @@ public class XtormUtilTest {
         IntPredicate intPredicate = expected -> actual == expected;
         Assertions.assertThat(intPredicate).accepts(3);
 
-    }
+    }*/
 
+
+    @Test
+    public void downloadTest() {
+
+        Boot boot = new Boot();
+        boot.boot();
+        for( int i =0 ; i < 100; i++) {
+            XtormUtil.downloadElement(XtormUtil.XtormServer.MASK_XTORM, "2019090417072200", "D:\\Temp\\" + i + ".txt");
+        }
+
+    }
 
 }

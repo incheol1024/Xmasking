@@ -31,17 +31,19 @@ public class DownloadAgentImpl implements DownloadAgent {
 
     private static boolean parallelOption = Boolean.valueOf(AppProperty.getValue("PARALLEL_OPTION"));
 
-    Logger logger = LoggerFactory.getLogger(DownloadAgentImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(DownloadAgentImpl.class);
 
-    private String order;
+    private static String agentName = "downlaod";
+
+    private String orderId;
 
     public DownloadAgentImpl(String order) {
         if (order.equals("0001") || order.equals("0002") || order.equals("0003")) {
-            this.order = order;
+            this.orderId = order;
         } else {
             throw new RuntimeException("차수가 잘못 입력 되었습니다. 가능 차수: 0001, 0002, 0003");
         }
-
+        Stoper.addStopIdTable(agentName + orderId, false);
     }
 
     @Override
@@ -51,17 +53,18 @@ public class DownloadAgentImpl implements DownloadAgent {
             logger.debug("Getting download target date");
             String date = MaskDao.findDownDate();
             if (date == null || date.equals("")) {
-                logger.debug("order - {} No longer exist target date", order);
+                logger.debug("orderId - {} No longer exist target date", orderId);
+                Stoper.modifyStatusInStopIdTable(agentName + orderId, true);
                 return;
             }
 
             logger.debug("Getting download target list...");
-            List<String> elementIdList = MaskDao.getElementIdListOfDownload(order, date);
+            List<String> elementIdList = MaskDao.getElementIdListOfDownload(orderId, date);
 
             if (elementIdList.size() == 0) {
-                logger.debug("order - {}, date - {} is not exist target ElementId.", order, date);
-                MaskDao.updateDownDateSuccess(order, date);
-                logger.debug("order - {}, date - {} updated row ", order, date);
+                logger.debug("orderId - {}, date - {} is not exist target ElementId.", orderId, date);
+                MaskDao.updateDownDateSuccess(orderId, date);
+                logger.debug("orderId - {}, date - {} updated row ", orderId, date);
                 continue;
             }
 
@@ -76,6 +79,8 @@ public class DownloadAgentImpl implements DownloadAgent {
             this.updateResult(resultStream);
 
         }
+
+        Stoper.modifyStatusInStopIdTable(agentName + orderId, true);
     }
 
     private void updateResult(Stream<DownloadResultParamDto> resultStream) {
@@ -110,8 +115,8 @@ public class DownloadAgentImpl implements DownloadAgent {
         return elementIdStream
                 .map((elementId) -> {
                     String downPath = getDownPath() + File.separator + elementId;
-
                     int downloadResult = 0;
+
                     if (CommonUtil.isPastElementId(elementId))
                         downloadResult = XtormUtil.downloadElement(MASK_XTORM, elementId, downPath);
                     else

@@ -22,9 +22,12 @@ public class DownloadJob implements Job {
 
     private Logger logger = LoggerFactory.getLogger(DownloadJob.class);
 
+    private String orders = AppProperty.getValue("DOWNLOAD_ORDER");
+
     @Override
     public void execute(JobExecutionContext context) {
 
+/*
         if (Objects.isNull(executorService))
             executorService = getExecutorService();
 
@@ -36,6 +39,15 @@ public class DownloadJob implements Job {
 
         if (threadPoolExecutor.getActiveCount() < maxThread && !DownloadAgentImpl.isCollecting())
             executorService.execute(new DownloadAgentImpl("0001"));
+
+*/
+
+    String[] orderArr = orders.split(",");
+
+    for(String order : orderArr) {
+        ExecutorService executorService = getExecutorService();
+        executorService.execute(new DownloadAgentImpl(order));
+    }
 
     }
 

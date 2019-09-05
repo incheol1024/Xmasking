@@ -21,10 +21,13 @@ public class ReplaceAgentImpl implements ReplaceAgent {
 
     private Logger logger = LoggerFactory.getLogger(ReplaceAgentImpl.class);
 
-    private String order;
+    private static String agentName = "replace";
+
+    private String orderId;
 
     public ReplaceAgentImpl(String order) {
-        this.order = order;
+        this.orderId = order;
+        Stoper.addStopIdTable(agentName + order, false);
     }
 
     @Override
@@ -34,16 +37,17 @@ public class ReplaceAgentImpl implements ReplaceAgent {
 
             String date = MaskDao.findReplaceDate();
             if (date == null || date.equals("")) {
-                logger.debug("order - {} No longer exist replace target date", order);
+                logger.debug("orderId - {} No longer exist replace target date", orderId);
+                Stoper.modifyStatusInStopIdTable(agentName + orderId, true);
                 return;
             }
 
-            List<ReplaceTargetDto> replaceList = MaskDao.getElementIdListOfReplace(order, date);
+            List<ReplaceTargetDto> replaceList = MaskDao.getElementIdListOfReplace(orderId, date);
 
             if (replaceList.size() == 0) {
-                logger.debug("order - {}, date - {} is not ", order, date);
-                MaskDao.updateDownDateSuccess(order, date);
-                logger.debug("update for order - {}, date - {}  success param ", order, date);
+                logger.debug("orderId - {}, date - {} is not ", orderId, date);
+                MaskDao.updateDownDateSuccess(orderId, date);
+                logger.debug("update for orderId - {}, date - {}  success param ", orderId, date);
                 continue;
             }
 
@@ -52,12 +56,11 @@ public class ReplaceAgentImpl implements ReplaceAgent {
             int replaceSuccessCount = 0;
             filteredReplaceDtoStream.
                     map(replaceTarget -> {
-                        boolean isPast = CommonUtil.isPastElementId(replaceTarget.getM_sys_id());
                         int result = 0;
 
-                        if (isPast)
+                        if (CommonUtil.isPastElementId(replaceTarget.getM_sys_id()))
                             result = XtormUtil.replaceElement(MASK_XTORM, replaceTarget.getM_sys_id(), replaceTarget.getIf_img_dir());
-                         else
+                        else
                             result = XtormUtil.replaceElement(EDMS_XTORM, replaceTarget.getM_sys_id(), replaceTarget.getIf_img_dir());
 
                         ReplaceResultDto replaceResultDto = new ReplaceResultDto();
@@ -79,7 +82,7 @@ public class ReplaceAgentImpl implements ReplaceAgent {
 
             logger.debug("Replace Success Count = {}", replaceSuccessCount);
         }
-
+        Stoper.modifyStatusInStopIdTable(agentName + orderId, true);
     }
 
 

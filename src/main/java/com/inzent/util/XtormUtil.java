@@ -66,9 +66,9 @@ public final class XtormUtil {
         }
 
         if (result != 0)
-            logger.error("Xtorm Download Fail {} . return code {}, error msg - {}", element.m_elementId, result, element.m_lastError);
+            logger.error("{} Download Fail {} . return code {}, error msg - {}", xtormServer.name(), element.m_elementId, result, element.m_lastError);
 
-        logger.debug("Xtorm Download Success. {} : {}", element.m_elementId, localFile);
+        logger.debug("{} Download Success. {} : {}", xtormServer.name(), element.m_elementId, localFile);
 
         return result;
     }
@@ -91,11 +91,31 @@ public final class XtormUtil {
             XtormConnection.maskConnectionPool.releaseConnect(connectData, false);
         }
 
-        if (result != 0)
-            logger.error("Xtorm Download Fail {} . return code {}, error msg - {}", element.m_elementId, result, element.m_lastError);
+        if (result != 0) {
+            logger.error("{} Download Fail {} . return code {}, error msg - {}", xtormServer.name(), element.m_elementId, result, element.m_lastError);
+            return result;
+        }
 
-        logger.debug("Xtorm Download Success. {} : {}", element.m_elementId, localFile);
+        logger.debug("{} Download Success. {} : {}", xtormServer.name(), element.m_elementId, localFile);
         return result;
+    }
+
+    public void closeConnectionPool() {
+
+        if(XtormConnection.edmsConnectionPool != null){
+            logger.debug("EDMS XTORM Pooling stop ========================");
+            XtormConnection.edmsConnectionPool.stop();
+            logger.debug("EDMS XTORM POOL COUNT:" + XtormConnection.edmsConnectionPool.getInUseCount());
+            XtormConnection.edmsConnectionPool = null;
+        }
+
+        if(XtormConnection.maskConnectionPool != null) {
+            logger.debug("XMASK XTORM Pooling stop ========================");
+            XtormConnection.maskConnectionPool.stop();
+            logger.debug("XMASK XTORM POOL COUNT:" + XtormConnection.maskConnectionPool.getInUseCount());
+            XtormConnection.maskConnectionPool = null;
+        }
+
     }
 
     private static asysUsrElement getAsysUsrElement(String elementId, asysConnectData connection) {
@@ -103,6 +123,7 @@ public final class XtormUtil {
         element.m_elementId = XtormConnection.EDMS_GATEWAY + "::" + elementId + "::" + XtormConnection.EDMS_ECLASS;
         return element;
     }
+
 
 
     private static class XtormConnection {
@@ -114,6 +135,7 @@ public final class XtormUtil {
         private static String EDMS_PASSWORD = AppProperty.getValue("XTORM_EDMS_PASSWORD");
         private static String EDMS_GATEWAY = AppProperty.getValue("XTORM_EDMS_GATEWAY");
         private static String EDMS_ECLASS = AppProperty.getValue("XTORM_EDMS_ECLASS");
+        private static String EDMS_POOL = AppProperty.getValue("XTORM_EDMS_POOL");
 
         private static String XMASK_SERVER = AppProperty.getValue("XTORM_MASK_SERVER");
         private static int XMASK_PORT = Integer.parseInt(AppProperty.getValue("XTORM_MASK_PORT"));
@@ -122,6 +144,7 @@ public final class XtormUtil {
         private static String XMASK_PASSWORD = AppProperty.getValue("XTORM_MASK_PASSWORD");
         private static String XMASK_GATEWAY = AppProperty.getValue("XTORM_MASK_GATEWAY");
         private static String XMASK_ECLASS = AppProperty.getValue("XTORM_MASK_ECLASS");
+        private static String XMASK_POOL = AppProperty.getValue("XTORM_MASK_POOL");
 
         private static asysConnectPool edmsConnectionPool = null;
 
@@ -130,8 +153,8 @@ public final class XtormUtil {
         private static Logger logger = LoggerFactory.getLogger(XtormConnection.class);
 
         static {
-            Vector vArgs = new Vector();
-            vArgs.add(new Object[]{EDMS_SERVER, new Integer(EDMS_PORT), EDMS_CLIENT, EDMS_USER, EDMS_PASSWORD});
+            Vector edmsVector = new Vector();
+            edmsVector.add(new Object[]{EDMS_SERVER, new Integer(EDMS_PORT), EDMS_CLIENT, EDMS_USER, EDMS_PASSWORD});
             //vArgs.add(new Object[]{"failover1,failover2", new Integer(2102), "myTest", "SUPER", "SUPER"});
             /*
              * @param name Pool name
@@ -142,17 +165,17 @@ public final class XtormUtil {
              * @param autoext connection auto-extension flag
              * @param roundrobin if true, we'll use arguments in vArgs with round-robin
              */
-            edmsConnectionPool = new asysConnectPool("p1", "com.windfire.apis.asysConnectData", vArgs, 10, false, true, false);
+            edmsConnectionPool = new asysConnectPool("EDMS XTORM POOL", "com.windfire.apis.asysConnectData", edmsVector, Integer.valueOf(EDMS_POOL), false, true, false);
 
             logger.debug("EDMS Xtorm Pooling start ========================");
-            boolean ok = maskConnectionPool.start();
+            boolean ok = edmsConnectionPool.start();
             if (!ok) {
                 logger.error("EDMS Xtorm Pooling ERROR: {}", maskConnectionPool.getLastError());
             }
 
-            Vector vector = new Vector();
-            vArgs.add(new Object[]{XMASK_SERVER, new Integer(XMASK_PORT), XMASK_CLIENT, XMASK_USER, XMASK_PASSWORD});
-            maskConnectionPool = new asysConnectPool("p1", "com.windfire.apis.asysConnectData", vector, 10, false, true, false);
+            Vector maskVector = new Vector();
+            maskVector.add(new Object[]{XMASK_SERVER, new Integer(XMASK_PORT), XMASK_CLIENT, XMASK_USER, XMASK_PASSWORD});
+            maskConnectionPool = new asysConnectPool("MASK XTORM POOL", "com.windfire.apis.asysConnectData", maskVector, Integer.valueOf(XMASK_POOL), false, true, false);
 
             logger.debug("MASK Xmask Pooling start ========================");
 
